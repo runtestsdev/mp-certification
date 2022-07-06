@@ -1,0 +1,16 @@
+curl -X POST \
+-H "Content-Type: application/json" \
+-H 'Authorization: Bearer TEST-7033352672141865-072112-1dcc4a93344995b15aaa32ddd66d7d3f-333811006' \
+"https://api.mercadopago.com/users/test" \
+-d '{"site_id":"MLB","description" : "Usuário de teste."}'
+
+
+{
+  "id":1155107080,
+  "nickname":"TETE1210633",
+  "password":"qatest7658",
+  "site_status":"active",
+  "site_id":"MLB","description":
+  "Usuário de teste.","date_created":"2022-07-05T13:42:44-04:00","date_last_updated":"2022-07-05T13:42:44-04:00"
+}
+
