@@ -2,11 +2,11 @@
   "name": "mp-card-payment-nodejs",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
-    "debug": "nodemon --inspect=5005 server.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "debug": "nodemon --inspect=5005 index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

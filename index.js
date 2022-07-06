@@ -55,8 +55,6 @@ app.post("/notifications", function (req, res) { // https://www.mercadopago.com.
 var child_process = require("child_process");
 child_process.exec("hostname -f", function(err, stdout, stderr) {
   var hostname = stdout.trim();
-  // console.log(hostname);
-  console.log(app.get('appPath'));
 });
 
 app.post("/create_preference", (req, res) => {
