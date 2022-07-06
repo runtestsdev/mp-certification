@@ -13,20 +13,20 @@ mercadopago.configure({
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
-app.use(express.static("../../client"));
+app.use(express.static("./client"));
 
 app.get("/", function (req, res) {
-  res.status(200).sendFile("index.html", { root: "../../client" });
+  res.status(200).sendFile("index.html", { root: "./client" });
 }); 
 
 app.get("/success", function (req, res) {
-  res.status(200).sendFile("success.html", { root: "../../client" });
+  res.status(200).sendFile("success.html", { root: "./client" });
 }); 
 app.get("/failure", function (req, res) {
-  res.status(200).sendFile("failure.html", { root: "../../client" });
+  res.status(200).sendFile("failure.html", { root: "./client" });
 }); 
 app.get("/pending", function (req, res) {
-  res.status(200).sendFile("pending.html", { root: "../../client" });
+  res.status(200).sendFile("pending.html", { root: "./client" });
 }); 
 
 app.post("/notifications", function (req, res) { // https://www.mercadopago.com.br/developers/pt/docs/notifications/webhooks/webhooks
