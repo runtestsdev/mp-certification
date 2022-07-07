@@ -35,21 +35,16 @@ app.post("/notifications", function (req, res) { // https://www.mercadopago.com.
   // TODO: criar um JSON disso: 
   // ?collection_id=[PAYMENT_ID]&collection_status=approved&external_reference=[EXTERNAL_REFERENCE]&payment_type=credit_card
   // &preference_id=[PREFERENCE_ID]&site_id=[SITE_ID]&processing_mode=aggregator&merchant_account_id=null
-  /* 
-  {
-    "action": "payment.created",
-    "api_version": "v1",
-    "data": {
-      "id": "1288647318"
-    },
-    "date_created": "2022-07-05T20:34:05Z",
-    "id": 102158715997,
-    "live_mode": false,
-    "type": "payment",
-    "user_id": "333811006"
-  }
-  */
-  res.status(200).end();
+  /*
+    3) Você precisará desenvolver um receptor de notificação e especificá-lo em
+       notification_url. O tratamento correto dessas notificações de pagamento será
+       analisado. Será necessário que você nos envie o JSON que recebe na URL de
+       notificação, será verificado se corresponde à preferência gerada. 
+ */
+  const jsonReceiveInURL = req.query;
+  console.log('<<<<<<<<<<<<<<< jsonReceiveInURL >>>>>>>>>>>>>>>>\n\n', jsonReceiveInURL,'\n\n');
+
+  res.status(200).json(jsonReceiveInURL);
 }); 
 
 // Obter o domínio que está executando a aplicação
@@ -75,15 +70,15 @@ app.post("/create_preference", (req, res) => {
 			}
 		],
 		back_urls: {
-			"success": "https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/success", //"http://localhost:8080/feedback",
-			"failure": "https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/failure", //"http://localhost:8080/feedback",
-			"pending": "https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/pending", //"http://localhost:8080/feedback"
+			"success": 'https://mpago-certification.herokuapp.com/success', //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/success", //"http://localhost:8080/feedback",
+			"failure": 'https://mpago-certification.herokuapp.com/failure', //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/failure", //"http://localhost:8080/feedback",
+			"pending": 'https://mpago-certification.herokuapp.com/pending' // "https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/pending", //"http://localhost:8080/feedback"
 		},
     payer,
     payment_methods,
 		auto_return: "approved",
     "external_reference": "mrgenesis@hotmail.com",
-    notification_url: "https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/notifications",
+    notification_url: 'https://mpago-certification.herokuapp.com/notifications' //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/notifications",
 	};
 
 	mercadopago.preferences.create(preference, { headers:  { 'X-meli-session-id': MP_DEVICE_SESSION_ID } })

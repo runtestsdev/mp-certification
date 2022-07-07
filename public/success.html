@@ -1,1 +1,15 @@
 <h1>success</h1>
+<div id="data-success"></div>
+<script>
+  function model(item) {
+    return `<p>${item[0]}: ${decodeURIComponent(item[1])}</p>`;
+  }
+  const url = document.location.href;
+  const idx = url.indexOf('\?') + 1;
+  const query = url.substr(idx);
+  const propertiesText = query.split('&');
+  
+  const HTMLData = propertiesText
+  .map(item => model(item.split('='))).join('');
+  document.querySelector('#data-success').innerHTML = HTMLData;
+</script>
