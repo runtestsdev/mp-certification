@@ -81,11 +81,9 @@ app.post("/create_preference", (req, res) => {
     notification_url: 'https://mpago-certification.herokuapp.com/notifications' //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/notifications",
 	};
 
-	mercadopago.preferences.create(preference, { headers:  { 'X-meli-session-id': MP_DEVICE_SESSION_ID } })
+	mercadopago.preferences.create(preference, { headers:  { 'X-meli-session-id': MP_DEVICE_SESSION_ID, 'integrator_id': 'dev_24c65fb163bf11ea96500242ac130004' } })
 		.then(function (response) {
-      console.log('\n\n <<<<<<<<<<<<<<<<<<< response.body >>>>>>>>>>>>>\n\n');
-      console.log(response.body);
-      console.log('\n\n <<<<<<<<<<<<<<<<<<< fim >>>>>>>>>>>>>\n\n');
+
 			res.json({
 				init_point: response.body.init_point
 			});
