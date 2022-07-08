@@ -1,3 +1,4 @@
+const https = require('https');
 const express = require("express");
 const app = express();
 const cors = require("cors");
@@ -56,9 +57,22 @@ child_process.exec("hostname -f", function(err, stdout, stderr) {
 app.post("/create_preference", (req, res) => {
   const MP_DEVICE_SESSION_ID = req.body.MP_DEVICE_SESSION_ID;
   const { payment_methods, payer } = require('./payment-configure/index');
+  console.log('\n\n\req.body\n\n', req.body)
+  const reqOptions = {
+    host: 'api.mercadopago.com',
+    path: '/checkout/preferences',
+    port: 443,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer APP_USR-334491433003961-030821-12d7475807d694b645722c1946d5ce5a-725736327',
+      'X-meli-session-id': MP_DEVICE_SESSION_ID,
+      'integrator_id': 'dev_24c65fb163bf11ea96500242ac130004',
+    }
+  };
 
 	let preference = { // Todas as propriedades preenchidas: https://www.mercadopago.com.br/developers/pt/docs/checkout-pro/checkout-customization/preferences
-		items: [
+		"items": [
 			{
 				id: req.body.id,
 				title: req.body.title,
@@ -69,27 +83,42 @@ app.post("/create_preference", (req, res) => {
         currency_id: "BRL",
 			}
 		],
-		back_urls: {
+		"back_urls": {
 			"success": 'https://mpago-certification.herokuapp.com/success', //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/success", //"http://localhost:8080/feedback",
 			"failure": 'https://mpago-certification.herokuapp.com/failure', //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/failure", //"http://localhost:8080/feedback",
 			"pending": 'https://mpago-certification.herokuapp.com/pending' // "https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/pending", //"http://localhost:8080/feedback"
 		},
-    payer,
-    payment_methods,
-		auto_return: "approved",
+    "payer": payer,
+    "payment_methods": { ...payment_methods },
+		"auto_return": "approved",
     "external_reference": "mrgenesis@hotmail.com",
-    notification_url: 'https://mpago-certification.herokuapp.com/notifications' //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/notifications",
+    "notification_url": 'https://mpago-certification.herokuapp.com/notifications' //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/notifications",
 	};
 
-	mercadopago.preferences.create(preference, { headers:  { 'X-meli-session-id': MP_DEVICE_SESSION_ID, 'integrator_id': 'dev_24c65fb163bf11ea96500242ac130004' } })
-		.then(function (response) {
-
-			res.json({
-				init_point: response.body.init_point
+  const MPRequest = https.request(reqOptions, (MPResponse) => {
+    MPResponse.setEncoding('utf8');
+    MPResponse.on('data', data => {
+      console.log('\n\n\nhttps\n\n', typeof data)
+      res.json({
+				init_point: JSON.parse(data).init_point
 			});
-		}).catch(function (error) {
-			console.log(error);
-		});
+    });
+  });
+  const strData = JSON.stringify(preference);
+  console.log('\n\n\n\n', strData, '\n\n')
+  MPRequest.write(strData);
+  MPRequest.end();
+
+
+	// mercadopago.preferences.create(preference, { headers:  { 'X-meli-session-id': MP_DEVICE_SESSION_ID, 'integrator_id': 'dev_24c65fb163bf11ea96500242ac130004' } })
+	// 	.then(function (response) {
+
+	// 		res.json({
+	// 			init_point: response.body.init_point
+	// 		});
+	// 	}).catch(function (error) {
+	// 		console.log(error);
+	// 	});
 });
 
 app.get('/feedback', function(req, res) {
