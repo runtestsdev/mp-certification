@@ -48,7 +48,7 @@ document.getElementById("checkout-btn").addEventListener("click", function() {
     quantity: document.getElementById("quantity").value,
     description: document.getElementById("product-description").innerHTML,
     price: document.getElementById("unit-price").innerHTML,
-    MP_DEVICE_SESSION_ID
+    MP_DEVICE_SESSION_ID: window.MP_DEVICE_SESSION_ID
   };
     
   fetch("/create_preference", {
