@@ -4,7 +4,6 @@ const cors = require("cors");
 const mercadopago = require("mercadopago");
 const port = process.env.PORT || 3000;
 
-// REPLACE WITH YOUR ACCESS TOKEN AVAILABLE IN: https://developers.mercadopago.com/panel
 mercadopago.configure({
 	access_token: 'APP_USR-334491433003961-030821-12d7475807d694b645722c1946d5ce5a-725736327',
   integrator_id: 'dev_24c65fb163bf11ea96500242ac130004'
@@ -20,12 +19,18 @@ app.get("/", function (req, res) {
 }); 
 
 app.get("/success", function (req, res) {
+  const jsonReceiveInURL = req.query;
+  console.log('\n\n<<<<<<< Informação da rota "/success" >>>>>>>\n', jsonReceiveInURL);
   res.status(200).sendFile("success.html", { root: "./public" });
 }); 
 app.get("/failure", function (req, res) {
+  const jsonReceiveInURL = req.query;
+  console.log('\n\n<<<<<<< Informação da rota "/failure" >>>>>>>\n', jsonReceiveInURL);
   res.status(200).sendFile("failure.html", { root: "./public" });
 }); 
 app.get("/pending", function (req, res) {
+  const jsonReceiveInURL = req.query;
+  console.log('\n\n<<<<<<< Informação da rota "/pending" >>>>>>>\n', jsonReceiveInURL);
   res.status(200).sendFile("pending.html", { root: "./public" });
 }); 
 
@@ -37,7 +42,7 @@ app.post("/notifications", function (req, res) { // https://www.mercadopago.com.
        notificação, será verificado se corresponde à preferência gerada. 
  */
   const jsonReceiveInURL = req.query;
-  console.log('<<<<<<<<<<<<<<< jsonReceiveInURL >>>>>>>>>>>>>>>>\n\n', jsonReceiveInURL,'\n\n');
+  console.log('\n\n<<<<<<< Informação da rota "/notifications" >>>>>>>\n', jsonReceiveInURL);
   res.status(200).json(jsonReceiveInURL);
 }); 
 
@@ -67,15 +72,27 @@ app.post("/create_preference", (req, res) => {
     "external_reference": "mrgenesis@hotmail.com",
     "notification_url": 'https://mpago-certification.herokuapp.com/notifications' //"https://webhook.site/16ebe948-048a-4563-9c55-b24f72d92fcb/notifications",
 	};
-
+  
 	mercadopago.preferences.create(preference, { headers:  { 'X-meli-session-id': MP_DEVICE_SESSION_ID } })
 		.then(function (response) {
+      console.log('<<<<<<< Informação da "response" da preferência >>>>>>>', response);
 			res.json({
 				init_point: response.body.init_point
 			});
 		}).catch(function (error) {
 			console.log(error);
 		});
+    console.log('<<<<<<< Informação do "header" da requisição >>>>>>>', {
+      'user-agent': 'MercadoPago Node.js SDK v1.5.8 (node v17.7.2-x64-linux)',
+      'x-product-id': 'bc32b6ntrpp001u8nhkg',
+      'x-tracking-id': 'platform:v17|v17.7.2,type:SDK1.5.8,so;',
+      accept: 'application/json',
+      'content-type': 'application/json',
+      Authorization: 'Bearer APP_USR-334491433003961-030821-12d7475807d694b645722c1946d5ce5a-725736327',
+      'x-integrator-id': 'dev_24c65fb163bf11ea96500242ac130004',
+      'X-meli-session-id': MP_DEVICE_SESSION_ID
+    })
+    console.log('<<<<<<< Informação da "preference" >>>>>>>', preference);
 });
 
 app.get('/feedback', function(req, res) {
