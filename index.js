@@ -75,7 +75,7 @@ app.post("/create_preference", (req, res) => {
   
 	mercadopago.preferences.create(preference, { headers:  { 'X-meli-session-id': MP_DEVICE_SESSION_ID } })
 		.then(function (response) {
-      console.log('<<<<<<< Informação da "response" da preferência >>>>>>>', response);
+      console.log('<<<<<<< Informação da "response" da preferência >>>>>>>', JSON.stringify(response,  null, '  '));
 			res.json({
 				init_point: response.body.init_point
 			});
@@ -92,7 +92,7 @@ app.post("/create_preference", (req, res) => {
       'x-integrator-id': 'dev_24c65fb163bf11ea96500242ac130004',
       'X-meli-session-id': MP_DEVICE_SESSION_ID
     })
-    console.log('<<<<<<< Informação da "preference" >>>>>>>', preference);
+    console.log('<<<<<<< Informação da "preference" >>>>>>>', JSON.stringify(preference,  null, '  '));
 });
 
 app.get('/feedback', function(req, res) {
